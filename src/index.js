@@ -22,9 +22,9 @@ function map(array, fn) {
   let arr = [];
  
   for (let i = 0; i < array.length; i++ ) {
-  let item = fn(array[i], i, array);
+    let item = fn(array[i], i, array);
  
-  arr.push(item);
+    arr = [... arr, item];
   }
  
   return arr;
@@ -41,8 +41,8 @@ function reduce(array, fn, initial) {
   let result = initial || array[i++];
  
   while (i < array.length) {
-  result = fn(result, array[i], i, array);
-  i++;
+    result = fn(result, array[i], i, array);
+    i++;
   }
  
   return result;
@@ -60,9 +60,9 @@ function upperProps(obj) {
   let arr = [];
   
   for (let prop in obj) {
-  if (obj.hasOwnProperty(prop)) {
-  prop = prop.toUpperCase();
-  arr.push(prop); 
+    if (obj.hasOwnProperty(prop)) {
+      prop = prop.toUpperCase();
+      arr.push(prop); 
     }
   }
  
@@ -79,16 +79,16 @@ function slice(array, from = 0, to = array.length) {
   const arr = [];
 
   if (to < 0) {
-      to = array.length + to;
+    to = array.length + to;
   }
   if (from < 0) {
-      from = array.length + from;
+    from = array.length + from;
   }
 
   for (let i = from; i < to; i++) {
-      if (array[i]) {
-          arr.push(array[i])
-      }
+    if (array[i]) {
+      arr.push(array[i])
+    }
   }
 
   return arr;
@@ -111,10 +111,10 @@ function createProxy(obj) {
 }
 
 export {
-    forEach,
-    map,
-    reduce,
-    upperProps,
-    slice,
-    createProxy
+  forEach,
+  map,
+  reduce,
+  upperProps,
+  slice,
+  createProxy
 };
