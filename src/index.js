@@ -17,19 +17,22 @@
    isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
  */
 function isAllTrue(array, fn) {
-  if (array.length == 0 || !Array.isArray(array)) {
-      throw new Error('empty array');
+
+  if (array.length === 0 || !(array instanceof Array)) {
+    throw new Error('empty array');
   }
 
   if (typeof fn !== 'function') {
-      throw new Error('fn is not a function');
+    throw new Error('fn is not a function');
   }
 
-  if (array.every(fn)) {
-      return true;
+  for (let item of array) {
+    if (!fn(item)) {
+        return false;
+    }
   }
 
-  return false;
+  return true;
 }
 
 /*
@@ -50,19 +53,22 @@ function isAllTrue(array, fn) {
  */
 function isSomeTrue(array, fn) {
 
-  if (array.length == 0 || !Array.isArray(array)) {
-      throw new Error('empty array');
+  if (array.length === 0 || !(array instanceof Array)) {
+    throw new Error('empty array');
   }
 
   if (typeof fn !== 'function') {
-      throw new Error('fn is not a function');
+    throw new Error('fn is not a function');
   }
 
-  if (array.some(fn)) {
-      return true;
+  for (let item of array) {
+    if (fn(item)) {
+        return true;
+    }
   }
 
   return false;
+
 }
 
 /*
@@ -76,25 +82,24 @@ function isSomeTrue(array, fn) {
  3.3: Необходимо выбрасывать исключение в случаях:
    - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn) {
+function returnBadArguments(fn, ...rest) {
   let arr = [];
 
   if (typeof fn !== 'function') {
-      throw new Error('fn is not a function');
+    throw new Error('fn is not a function');
   }
 
-  for (let i = 1; i < arguments.length; i++) {
-      try {
-          if (fn(arguments[i])) {
-              throw new Error();
-          }
-      } catch (e) {
-          arr.push(arguments[i]);
-      }
-  }
+  for (let item of rest) {
+    try {
+        fn(item);
+    } catch (e) {
+        arr.push(item);
+    }
+}
 
   return arr;
 }
+
 
 /*
  Задание 4:
@@ -119,37 +124,36 @@ function calculator(number = 0) {
       throw new Error('number is not a number');
   }
 
+  
+
   return {
-      sum: function () {
-          for (let i = 0; i < arguments.length; i++) {
-              number += arguments[i];
-          }
-          return number;
-      },
+    sum: (...rest) => {
+        return rest.reduce((prev, cur) => {
+            return prev + cur;
+        }, number)
+    },
 
-      dif: function () {
-          for (let i = 0; i < arguments.length; i++) {
-              number -= arguments[i];
-          }
-          return number;
-      },
+    dif: (...rest) => {
+        return rest.reduce((prev, cur) => {
+            return prev - cur;
+        }, number)
+    },
 
-      div: function () {
-          for (let i = 0; i < arguments.length; i++) {
-              if (arguments[i] == 0) {
-                  throw new Error('division by 0');
-              }
-              number /= arguments[i];
-          }
-          return number;
-      },
+      div: (...rest) => {
+        return rest.reduce((prev, cur) => {
+            if (cur === 0) {
+                throw new Error('division by 0');
+            }
 
-      mul: function () {
-          for (let i = 0; i < arguments.length; i++) {
-              number *= arguments[i];
-          }
-          return number;
-      }
+            return prev / cur;
+        }, number)
+    },
+
+      mul: (...rest) => {
+        return rest.reduce((prev, cur) => {
+            return prev * cur;
+        }, number)
+    }
   };
 }
 
