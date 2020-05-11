@@ -80,8 +80,9 @@ function delegate(target, fn) {
 function once(target, fn) {
   
   target.addEventListener('click', function (e) {
-    fn(), {once: true}
-  })
+    fn();
+  },
+  { once: true });
   
 }
 
